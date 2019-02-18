@@ -23,9 +23,8 @@ mix.js('resources/js/main.js', 'public/js')
 		'toastr',
 		'moment'
 	])
-	.sourceMaps()
 	.options({
-		// processCssUrls: false
+		processCssUrls: false
 	});
 
 if (mix.inProduction()) {
@@ -51,6 +50,7 @@ if (mix.inProduction()) {
 		.version();
 } else {
 	mix
+		.sourceMaps()
 		.webpackConfig({
 			plugins: [
 				// new BundleAnalyzerPlugin(),
