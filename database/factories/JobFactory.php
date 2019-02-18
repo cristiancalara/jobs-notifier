@@ -22,6 +22,9 @@ $factory->define(App\Job::class, function (Faker $faker) {
     }
 
     return [
+        'user_id'      => function () {
+            return factory(App\User::class)->create()->id;
+        },
         'api_id'       => $id,
         'title'        => $faker->sentence,
         'snippet'      => $faker->sentences(),

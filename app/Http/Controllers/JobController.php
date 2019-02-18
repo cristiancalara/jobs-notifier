@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Status;
+use App\Upwork\Client;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -15,6 +18,13 @@ class JobController extends Controller
 
     public function index(Request $request)
     {
+        /** @var User $user */
+        $user = auth()->user();
+        $since = Carbon::now()->subHour();
+
+        $client = new Client($user->access_token, $user->access_secret);
+        $jobs = $client->jobs($since);
+
         $statuses = Status::all();
 
         $key = $request->route('key');

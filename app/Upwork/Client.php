@@ -26,7 +26,7 @@ class Client
      *
      * @throws \Upwork\API\ApiException
      */
-    public function __construct($accessToken = null, $accessSecret = null, $perPage = 10)
+    public function __construct($accessToken = null, $accessSecret = null, $perPage = 99)
     {
         $this->config = new \Upwork\API\Config([
             'consumerKey'    => env('UPWORK_APP_KEY'),

@@ -45,7 +45,7 @@ class Rating
             $points += $criteria->apply($job);
         }
 
-        return $this->normalize($points) * 100;
+        return round($this->normalize($points) * 100);
     }
 
     protected function computeMinMax()

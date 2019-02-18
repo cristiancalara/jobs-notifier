@@ -15,22 +15,25 @@ class UpworkImporterTest extends TestCase
     /** @test */
     public function it_will_import_to_database()
     {
-        $client = Mockery::mock(Client::class)->makePartial();
-        $client->shouldReceive([
-            'setAccessToken'  => null,
-            'setAccessSecret' => null,
-            'jobs'            => $this->dummyResponse(),
-        ]);
-
-        $user = factory(User::class)->create([
-            'access_token'     => env('TEST_UPWORK_ACCESS_TOKEN'),
-            'access_secret'    => env('TEST_UPWORK_ACCESS_SECRET'),
-            'last_imported_at' => Carbon::minValue()->toDateString()
-        ]);
+        $jobs = $this->dummyResponse();
+        list($client, $user) = $this->getClientAndUser($jobs);
 
         (new Importer($user, $client))->import();
 
         $this->assertCount(2, Job::all());
+    }
+
+    /** @test */
+    public function it_will_not_import_based_on_filters()
+    {
+        $jobs                  = $this->dummyResponse();
+        $jobs[0]->subcategory2 = 'Not wanted';
+
+        list($client, $user) = $this->getClientAndUser($jobs);
+
+        (new Importer($user, $client))->import();
+
+        $this->assertCount(1, Job::all());
     }
 
     /**
@@ -113,5 +116,28 @@ If you are good fit, please send proposal with $kype id.',
                 ]
             ]
         ];
+    }
+
+    /**
+     * @param $jobs
+     *
+     * @return array
+     */
+    protected function getClientAndUser($jobs): array
+    {
+        $client = Mockery::mock(Client::class)->makePartial();
+        $client->shouldReceive([
+            'setAccessToken'  => null,
+            'setAccessSecret' => null,
+            'jobs'            => $jobs,
+        ]);
+
+        $user = factory(User::class)->create([
+            'access_token'     => env('TEST_UPWORK_ACCESS_TOKEN'),
+            'access_secret'    => env('TEST_UPWORK_ACCESS_SECRET'),
+            'last_imported_at' => Carbon::minValue()->toDateString()
+        ]);
+
+        return array($client, $user);
     }
 }
