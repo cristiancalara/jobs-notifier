@@ -2,11 +2,14 @@
 
 namespace App;
 
+use App\Upwork\Rating\Criteria\BudgetCriteria;
+use App\Upwork\Rating\Criteria\ClientCountryCriteria;
+use App\Upwork\Rating\Criteria\ClientFeedbackCriteria;
 use App\Upwork\Rating\Criteria\DateCreatedCriteria;
 use App\Upwork\Rating\Criteria\SubcategoryCriteria;
+use App\Upwork\Rating\Criteria\TitleCriteria;
 use App\Upwork\Rating\Rating;
 use App\Upwork\Rating\Criteria\JobTypeCriteria;
-
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -77,10 +80,27 @@ class Job extends Model
         'rating'
     ];
 
+    /**
+     * @param $value
+     *
+     * @return string
+     */
+    public function getSnippetAttribute($value)
+    {
+        return nl2br($value);
+    }
+
+    /**
+     * @return float|int
+     */
     public function getRatingAttribute()
     {
         return (new Rating([
+            new TitleCriteria,
             new JobTypeCriteria,
+            new ClientFeedbackCriteria,
+            new ClientCountryCriteria,
+            new BudgetCriteria,
             new DateCreatedCriteria,
             new SubcategoryCriteria
         ]))->for($this);

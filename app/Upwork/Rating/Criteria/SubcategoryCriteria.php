@@ -23,15 +23,6 @@ class SubcategoryCriteria extends Criteria
             case 'Scripts & Utilities':
                 return 10;
 
-            case 'Mobile Development':
-                return 0;
-
-            case 'Game Development':
-            case 'Desktop Software Development':
-            case 'Product Management':
-            case 'QA & Testing':
-                return $this->min;
-
             default:
                 return 0;
         }

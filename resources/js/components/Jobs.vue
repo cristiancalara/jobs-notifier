@@ -104,7 +104,7 @@
 			},
 
 			fromNow(job) {
-				return moment(job.date_created).fromNow()
+				return moment.utc(job.date_created).fromNow()
 			}
 		}
 	}
