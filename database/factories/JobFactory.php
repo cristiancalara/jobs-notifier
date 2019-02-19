@@ -21,6 +21,10 @@ $factory->define(App\Job::class, function (Faker $faker) {
         $skills[] = $faker->word;
     }
 
+    $category    = 'Web, Mobile & Software Dev';
+    $subcategory = $faker->word;
+    $country     = 'Singapore';
+
     return [
         'user_id'      => function () {
             return factory(App\User::class)->create()->id;
@@ -28,8 +32,8 @@ $factory->define(App\Job::class, function (Faker $faker) {
         'api_id'       => $id,
         'title'        => $faker->sentence,
         'snippet'      => $faker->sentences(),
-        'category2'    => 'Web, Mobile & Software Dev',
-        'subcategory2' => $faker->word,
+        'category2'    => $category,
+        'subcategory2' => $subcategory,
         'skills'       => $skills,
         'job_type'     => $faker->randomElement(['Hourly', 'Fixed']),
         'budget'       => $faker->numberBetween(0, 100000),
@@ -39,12 +43,21 @@ $factory->define(App\Job::class, function (Faker $faker) {
         'date_created' => $faker->dateTimeBetween('-1 year'),
         'url'          => "http://www.upwork.com/jobs/{$id}",
         'client'       => [
-            'country'                     => 'Singapore',
+            'country'                     => $country,
             'feedback'                    => $faker->numberBetween(0, 5),
             'reviews_count'               => $faker->numberBetween(0, 40),
             'jobs_posted'                 => $faker->numberBetween(0, 40),
             'past_hires'                  => $faker->numberBetween(0, 40),
             'payment_verification_status' => 'VERIFIED',
-        ]
+        ],
+        'extra'        => [
+            'job_category_level_two' => $subcategory,
+            'op_contractor_tier'     => $faker->numberBetween(1, 3),
+            'job_category_level_one' => $category,
+            'ciphertext'             => $id,
+            'buyer'                  => [
+                'op_country' => $country,
+            ]
+        ],
     ];
 });
