@@ -3,6 +3,7 @@
 namespace App\Upwork;
 
 use Carbon\Carbon;
+use Log;
 use Upwork\API\Routers\Jobs\Search;
 
 class Client
@@ -25,6 +26,7 @@ class Client
      * @param int $perPage
      *
      * @throws \Upwork\API\ApiException
+     * @throws \Exception
      */
     public function __construct($accessToken = null, $accessSecret = null, $perPage = 99)
     {
@@ -102,6 +104,12 @@ class Client
             // Get jobs.
             $response = $this->queryApiForJobs($params);
 
+            // An unknown error encountered.
+            if ($response->error) {
+                Log::error('API call to query jobs failed.', ['error' => $response->error]);
+                break;
+            }
+
             // No more jobs.
             if ( ! $response && ! $response->jobs) {
                 break;
@@ -121,6 +129,8 @@ class Client
             $offset += $this->perPage;
         } while ($createdAt && $since->lt($createdAt));
 
+        $jobs = $this->getAPIJobSpecificData($jobs);
+
         // Reverse the order to have the latest job the the latest entry.
         return array_reverse($jobs);
     }
@@ -135,5 +145,61 @@ class Client
         $searchService = new Search($this->client());
 
         return $searchService->find($params);
+    }
+
+    /**
+     * @param array $jobs
+     *
+     * @return array
+     */
+    public function getAPIJobSpecificData(array $jobs)
+    {
+        $profile = new \Upwork\API\Routers\Jobs\Profile($this->client());
+        $data    = [];
+
+        // We chunk as the endpoint allows a max of 20 keys.
+        $chunks = array_chunk($jobs, 20);
+        foreach ($chunks as $chunk) {
+            $ids = array_map(function ($job) {
+                return $job->id;
+            }, $chunk);
+
+            // Format ids separated by ;
+            $key = implode($ids, ';');
+
+            // Query the API.
+            $response = $profile->getSpecific($key);
+
+            // All good, we merge.
+            if ( ! $response->error) {
+                $data = array_merge($data, $response->profiles->profile);
+                continue;
+            }
+
+            // An error was thrown while trying to get the data in bulk.
+            // As we can't know which of the jobs triggered the error we will
+            // now query for each job individually.
+            foreach ($ids as $id) {
+                $response = $profile->getSpecific($id);
+
+                // Found the job that had the error.
+                if ($response->error) {
+                    Log::error('API call to get extra data for job failed.', ['error' => $response->error]);
+                    continue;
+                }
+
+                // Add job extra data.
+                $data[] = $response->profile;
+            }
+        }
+
+        // Merge jobs with the extra data.
+        foreach ($jobs as $job) {
+            $job->extra = collect($data)->first(function ($value) use ($job) {
+                return $value->ciphertext === $job->id;
+            });
+        }
+
+        return $jobs;
     }
 }

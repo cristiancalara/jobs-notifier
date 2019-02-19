@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $snippet
  * @property string $url
  * @property string $date_created
+ * @property mixed|null $extra
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job newModelQuery()
@@ -71,7 +72,8 @@ class Job extends Model
 
     protected $casts = [
         'client' => 'array',
-        'skills' => 'array'
+        'skills' => 'array',
+        'extra'  => 'array'
     ];
 
     protected $with = ['user', 'status'];
@@ -145,6 +147,7 @@ class Job extends Model
         $job->snippet      = $j->snippet;
         $job->url          = $j->url;
         $job->date_created = new Carbon($j->date_created);
+        $job->extra        = $j->extra;
 
         return $job;
     }

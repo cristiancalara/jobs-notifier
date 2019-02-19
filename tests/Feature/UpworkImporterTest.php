@@ -44,38 +44,130 @@ class UpworkImporterTest extends TestCase
     {
         return [
             (object)[
-                'id'           => '~01331cb9ce0b63f89a',
-                'title'        => 'Laravel developer for affiliate based E-commerce website​',
-                'snippet'      => 'We need an experienced laravel developer that has deep knowledge working with e-commerce websites linked to affiliate networks like LinkShare, Awin, and others. 
+                'id'           => '~01039681e7c1af5488',
+                'title'        => 'Developer to Customize and Optimize an existing theme',
+                'snippet'      => 'Deliverable
+2. Implementing Google and FB Ad conversion pixels, Product listing ads
+3. Optimizing theme for faster loading time
 
-The back-end system has to work so we can register purchases from our users. 
-
-Second phase of the project will be to deploy some new HTML pages.',
+I\'m looking for a team that can work with me to polish the theme and get it ready for rollout and work with us till completion of the project and explore working in the future for further tweaks and customizations.',
                 'category2'    => 'Web, Mobile & Software Dev',
                 'subcategory2' => 'Ecommerce Development',
-                'skills'       => [
-                    'affiliate-marketing',
-                    'google-cloud-platform',
-                    'html',
-                    'javascript',
-                    'laravel-framework',
-                    'php',
-                    'website-development',
-                ],
+                'skills'       =>
+                    [
+                        0 => 'html',
+                        1 => 'shopify',
+                        2 => 'shopify-templates',
+                        3 => 'web-design',
+                    ],
                 'job_type'     => 'Fixed',
-                'budget'       => 200,
+                'budget'       => 400,
                 'duration'     => null,
                 'workload'     => null,
                 'job_status'   => 'Open',
-                'date_created' => '2019-02-14T16:01:03+0000',
-                'url'          => 'http://www.upwork.com/jobs/~01331cb9ce0b63f89a',
-                'client'       => (object)[
-                    'country'                     => 'Singapore',
-                    'feedback'                    => 4.6697419912,
-                    'reviews_count'               => 12,
-                    'jobs_posted'                 => 33,
-                    'past_hires'                  => 18,
-                    'payment_verification_status' => 'VERIFIED',
+                'date_created' => '2019-02-19T05:47:11+0000',
+                'url'          => 'http://www.upwork.com/jobs/~01039681e7c1af5488',
+                'client'       =>
+                    [
+                        'country'                     => 'India',
+                        'feedback'                    => 0,
+                        'reviews_count'               => 0,
+                        'jobs_posted'                 => 3,
+                        'past_hires'                  => 0,
+                        'payment_verification_status' => null,
+                    ],
+                'extra'        => [
+                    'assignment_info'             => '',
+                    'op_low_hourly_rate_all'      => '0',
+                    'op_description'              => 'Deliverable
+1. Customization of Fastor Shopify theme
+2. Implementing Google and FB Ad conversion pixels, Product listing ads
+3. Optimizing theme for faster loading time
+
+I\'m looking for a team that can work with me to polish the theme and get it ready for rollout and work with us till completion of the project and explore working in the future for further tweaks and customizations.',
+                    'op_required_skills'          => [
+                        'op_required_skill' => [
+                            [
+                                'skill' => 'html',
+                            ],
+
+                            [
+                                'skill' => 'shopify',
+                            ],
+
+                            [
+                                'skill' => 'shopify-templates',
+                            ],
+
+                            [
+                                'skill' => 'web-design',
+                            ],
+                        ],
+                    ],
+                    'op_ctime'                    => '1550555223000',
+                    'job_type'                    => 'Fixed',
+                    'op_pref_hourly_rate_min'     => '',
+                    'op_title'                    => 'Shopify Developer to Customize and Optimize an existing theme',
+                    'amount'                      => '400.00',
+                    'op_job_category_v2'          => [
+                        'op_job_category_v' => [
+                            'name'   => 'Ecommerce Development',
+                            'groups' => [
+                                'group' => [
+                                    'name' => 'Web, Mobile & Software Dev',
+                                    'uid'  => '531770282580668418',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'op_additional_questions'     => '',
+                    'job_category_level_two'      => '',
+                    'op_attached_doc'             => '',
+                    'op_pref_english_skill'       => '0',
+                    'op_engagement'               => '',
+                    'op_contractor_tier'          => '3',
+                    'op_tot_feedback'             => '0',
+                    'op_pref_has_portfolio'       => '0',
+                    'op_is_cover_letter_required' => '1',
+                    'op_other_jobs'               => '',
+                    'op_pref_hourly_rate_max'     => '',
+                    'op_high_hourly_rate_all'     => '0',
+                    'op_cny_upm_verified'         => '0',
+                    'op_pref_fb_score'            => '',
+                    'engagement_weeks'            => '',
+                    'job_category_level_one'      => '',
+                    'ciphertext'                  => '~01039681e7c1af5488',
+                    'op_pref_odesk_hours'         => '100',
+                    'assignments'                 => '',
+                    'ui_opening_status'           => 'Active',
+                    'op_pref_location'            => 'Asia',
+                    'buyer'                       => [
+                        'op_tot_jobs_open'   => '1',
+                        'op_tot_charge'      => '0',
+                        'op_timezone'        => 'UTC+05:30 Mumbai, Kolkata, Chennai, New Delhi',
+                        'op_contract_date'   => 'March 20, 2017',
+                        'op_tot_jobs_posted' => '3',
+                        'op_tot_asgs'        => '0',
+                        'op_adjusted_score'  => '0',
+                        'op_tot_hours'       => '0',
+                        'op_tot_fp_asgs'     => '0',
+                        'op_country'         => 'India',
+                        'op_tot_jobs_filled' => '0',
+                    ],
+                    'candidates'                  => [
+                        'candidate' => [
+                            0 => [
+                                'create_date_ts' => '1550555496',
+                                'ciphertext'     => '~010d7a422e3567ddc5',
+                            ],
+                            1 => [
+                                'create_date_ts' => '1550555286',
+                                'ciphertext'     => '~0124c46b03fd1b360d',
+                            ],
+                        ],
+                    ],
+                    'op_tot_intv'                 => '1',
+                    'op_tot_cand'                 => '3',
                 ],
             ],
             (object)[
@@ -113,7 +205,8 @@ If you are good fit, please send proposal with $kype id.',
                     'jobs_posted'                 => 1,
                     'past_hires'                  => 0,
                     'payment_verification_status' => 'VERIFIED',
-                ]
+                ],
+                'extra'        => null
             ]
         ];
     }
