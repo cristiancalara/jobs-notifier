@@ -14,16 +14,30 @@ class TitleFilterTest extends TestCase
     {
         $filter = new TitleFilter();
 
-        $toFail = factory(Job::class)->make([
+        $toFail1 = factory(Job::class)->make([
             'title' => 'Something .net not wanted'
         ]);
 
-        $toPass = factory(Job::class)->make([
+        $toFail2 = factory(Job::class)->make([
+            'title' => 'Something Google Sheets not wanted'
+        ]);
+
+        $toFail3 = factory(Job::class)->make([
+            'title' => 'Something [.net] not wanted'
+        ]);
+
+        $toPass1 = factory(Job::class)->make([
             'title' => 'This will pass'
         ]);
 
+        $toPass2 = factory(Job::class)->make([
+            'title' => 'This strVBAtest pass'
+        ]);
 
-        $this->assertFalse($filter->pass($toFail));
-        $this->assertTrue($filter->pass($toPass));
+        $this->assertFalse($filter->pass($toFail1));
+        $this->assertFalse($filter->pass($toFail2));
+        $this->assertFalse($filter->pass($toFail3));
+        $this->assertTrue($filter->pass($toPass1));
+        $this->assertTrue($filter->pass($toPass2));
     }
 }
