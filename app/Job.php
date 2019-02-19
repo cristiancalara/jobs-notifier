@@ -5,6 +5,7 @@ namespace App;
 use App\Upwork\Rating\Criteria\BudgetCriteria;
 use App\Upwork\Rating\Criteria\ClientCountryCriteria;
 use App\Upwork\Rating\Criteria\ClientFeedbackCriteria;
+use App\Upwork\Rating\Criteria\ContractorTierCriteria;
 use App\Upwork\Rating\Criteria\DateCreatedCriteria;
 use App\Upwork\Rating\Criteria\SubcategoryCriteria;
 use App\Upwork\Rating\Criteria\TitleCriteria;
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $snippet
  * @property string $url
  * @property string $date_created
+ * @property mixed|null $extra
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job newModelQuery()
@@ -71,7 +73,8 @@ class Job extends Model
 
     protected $casts = [
         'client' => 'array',
-        'skills' => 'array'
+        'skills' => 'array',
+        'extra'  => 'array'
     ];
 
     protected $with = ['user', 'status'];
@@ -98,6 +101,7 @@ class Job extends Model
         return (new Rating([
             new TitleCriteria,
             new JobTypeCriteria,
+            new ContractorTierCriteria,
             new ClientFeedbackCriteria,
             new ClientCountryCriteria,
             new BudgetCriteria,
@@ -145,6 +149,7 @@ class Job extends Model
         $job->snippet      = $j->snippet;
         $job->url          = $j->url;
         $job->date_created = new Carbon($j->date_created);
+        $job->extra        = $j->extra;
 
         return $job;
     }

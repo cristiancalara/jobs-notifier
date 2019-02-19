@@ -16,7 +16,7 @@ class TitleCriteria extends Criteria
     {
         $title = strtolower($job->title);
 
-        if (str_contains($title, [
+        if (str_contains_word($title, [
             'node.js',
             'express.js',
             'laravel',
@@ -30,14 +30,14 @@ class TitleCriteria extends Criteria
             return 20;
         }
 
-        if (str_contains($title, [
+        if (str_contains_word($title, [
             'angular',
             'react'
         ])) {
             return -10;
         }
 
-        if (str_contains($title, [
+        if (str_contains_word($title, [
             'urgent',
             'immediately'
         ])) {

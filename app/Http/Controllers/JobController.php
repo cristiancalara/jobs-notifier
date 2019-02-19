@@ -18,13 +18,6 @@ class JobController extends Controller
 
     public function index(Request $request)
     {
-        /** @var User $user */
-        $user = auth()->user();
-        $since = Carbon::now()->subHour();
-
-        $client = new Client($user->access_token, $user->access_secret);
-        $jobs = $client->jobs($since);
-
         $statuses = Status::all();
 
         $key = $request->route('key');
