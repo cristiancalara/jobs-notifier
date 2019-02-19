@@ -145,13 +145,13 @@ class Job extends Model
     public function getAvgHourlyRateAttribute()
     {
         // No hourly assignments.
-        if ( ! $this->hourly_assignments) {
+        if ( ! $this->hourly_assignments->count()) {
             return null;
         }
 
         $sum = $this->hourly_assignments->reduce(function ($sum, $assignment) {
             // as_rate = '$10.00'
-            $rate = (float)substr($assignment['as_rate'], 0, 1);
+            $rate = (float)substr($assignment['as_rate'], 1);
 
             return $sum + $rate;
         });
@@ -167,7 +167,7 @@ class Job extends Model
     public function getMaxHourlyRateAttribute()
     {
         // No hourly assignments.
-        if ( ! $this->hourly_assignments) {
+        if ( ! $this->hourly_assignments->count()) {
             return null;
         }
 
@@ -183,7 +183,7 @@ class Job extends Model
     public function getHoursPaidAttribute()
     {
         // No hourly assignments.
-        if ( ! $this->hourly_assignments) {
+        if ( ! $this->hourly_assignments->count()) {
             return 0;
         }
 
