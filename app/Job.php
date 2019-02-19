@@ -5,6 +5,7 @@ namespace App;
 use App\Upwork\Rating\Criteria\BudgetCriteria;
 use App\Upwork\Rating\Criteria\ClientCountryCriteria;
 use App\Upwork\Rating\Criteria\ClientFeedbackCriteria;
+use App\Upwork\Rating\Criteria\ClientMaxHourlyRateCriteria;
 use App\Upwork\Rating\Criteria\ContractorTierCriteria;
 use App\Upwork\Rating\Criteria\DateCreatedCriteria;
 use App\Upwork\Rating\Criteria\SubcategoryCriteria;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * App\Job
  *
  * @property int $id
+ * @property int $user_id
+ * @property int|null $status_id
  * @property string $api_id
  * @property string $title
  * @property string $category2
@@ -32,9 +35,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $snippet
  * @property string $url
  * @property string $date_created
- * @property mixed|null $extra
+ * @property array|null $extra
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Support\Collection|null $assignments
+ * @property-read \Illuminate\Support\Collection|null $hourly_assignments
+ * @property-read \Illuminate\Support\Collection|null $fixed_assignments
+ * @property-read float|null $avg_hourly_rate
+ * @property-read int|null $hours_paid
+ * @property-read float|null $max_hourly_rate
+ * @property-read mixed $rating
+ * @property-read \App\Status|null $status
+ * @property-read \App\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job query()
@@ -55,11 +67,6 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job whereWorkload($value)
- * @property int $user_id
- * @property int|null $status_id
- * @property-read mixed $rating
- * @property-read \App\Status|null $status
- * @property-read \App\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job whereStatusId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Job whereUserId($value)
  */
@@ -80,7 +87,13 @@ class Job extends Model
     protected $with = ['user', 'status'];
 
     protected $appends = [
-        'rating'
+        'rating',
+        'assignments',
+        'hourly_assignments',
+        'fixed_assignments',
+        'avg_hourly_rate',
+        'hours_paid',
+        'max_hourly_rate'
     ];
 
     /**
@@ -94,6 +107,92 @@ class Job extends Model
     }
 
     /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAssignmentsAttribute()
+    {
+        $assignments = $this->extra['assignments']['assignment'] ?? null;
+        if ( ! $assignments) {
+            return collect([]);
+        }
+
+        return collect($assignments);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getFixedAssignmentsAttribute()
+    {
+        return $this->assignments->filter(function ($assignment) {
+            return $assignment['as_job_type'] === 'Fixed';
+        });
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getHourlyAssignmentsAttribute()
+    {
+        return $this->assignments->filter(function ($assignment) {
+            return $assignment['as_job_type'] === 'Hourly';
+        });
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getAvgHourlyRateAttribute()
+    {
+        // No hourly assignments.
+        if ( ! $this->hourly_assignments) {
+            return null;
+        }
+
+        $sum = $this->hourly_assignments->reduce(function ($sum, $assignment) {
+            // as_rate = '$10.00'
+            $rate = (float)substr($assignment['as_rate'], 0, 1);
+
+            return $sum + $rate;
+        });
+
+        $avg = $sum / $this->hourly_assignments->count();
+
+        return round($avg, 2);
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getMaxHourlyRateAttribute()
+    {
+        // No hourly assignments.
+        if ( ! $this->hourly_assignments) {
+            return null;
+        }
+
+        return $this->hourly_assignments->max(function ($assignment) {
+            // as_rate = '$10.00'
+            return (float)substr($assignment['as_rate'], 1);
+        });
+    }
+
+    /**
+     * @return int
+     */
+    public function getHoursPaidAttribute()
+    {
+        // No hourly assignments.
+        if ( ! $this->hourly_assignments) {
+            return 0;
+        }
+
+        return $this->hourly_assignments->reduce(function ($sum, $assignment) {
+            return $sum + (int)$assignment['as_total_hours'];
+        });
+    }
+
+    /**
      * @return float|int
      */
     public function getRatingAttribute()
@@ -104,6 +203,7 @@ class Job extends Model
             new ContractorTierCriteria,
             new ClientFeedbackCriteria,
             new ClientCountryCriteria,
+            new ClientMaxHourlyRateCriteria,
             new BudgetCriteria,
             new DateCreatedCriteria,
             new SubcategoryCriteria
