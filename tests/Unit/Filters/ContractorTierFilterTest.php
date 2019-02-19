@@ -31,9 +31,13 @@ class ContractorTierFilterTest extends TestCase
             ]
         ]);
 
+        $toPass3 = factory(Job::class)->create([
+            'extra' => null
+        ]);
 
         $this->assertFalse($filter->pass($toFail));
         $this->assertTrue($filter->pass($toPass1));
         $this->assertTrue($filter->pass($toPass2));
+        $this->assertTrue($filter->pass($toPass3));
     }
 }

@@ -25,14 +25,19 @@ class ContractorTierCriteriaTest extends TestCase
             ]
         ]);
 
-        $noValue = factory(Job::class)->create([
+        $noValue1 = factory(Job::class)->create([
             'extra' => [
                 'op_contractor_tier' => null
             ]
         ]);
 
+        $noValue2 = factory(Job::class)->create([
+            'extra' => null
+        ]);
+
         $this->assertEquals($criteria->maxPoints(), $criteria->apply($max));
         $this->assertEquals($criteria->minPoints(), $criteria->apply($min));
-        $this->assertEquals(0, $criteria->apply($noValue));
+        $this->assertEquals(0, $criteria->apply($noValue1));
+        $this->assertEquals(0, $criteria->apply($noValue2));
     }
 }
