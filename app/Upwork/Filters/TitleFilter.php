@@ -8,19 +8,53 @@ class TitleFilter extends Filter
 {
     public function pass(Job $job): bool
     {
+        $title = strtolower($job->title);
+
+        $whitelist = [
+            'vue',
+            'vue.js',
+            'laravel',
+            'wordpress',
+            'wp',
+            'woocommerce',
+            'imagick',
+            'node',
+            'node.js',
+            'nodejs',
+            'express',
+            'expressjs',
+            'express.js',
+            'facebook',
+            'graph api',
+            'google ads',
+            'phpunit'
+        ];
+
+        // If we find a word from the above we don't check for word in blacklist.
+        if (str_contains_word($title, $whitelist)) {
+            return true;
+        }
+
         $blacklist = [
             'c#',
+            'react',
+            'reactjs',
             'react.js',
-            '.net',
+            'angular',
+            'angularjs',
+            'angular.js',
             'asp.net',
             'shopify',
             'prestashop',
+            'timber',
             'kotlin',
             'bitrix',
+            'hubspot',
             'java spring',
             'drupal',
             'ruby',
             'joomla',
+            'elementor',
             'elementor pro',
             'pyrocms',
             'weebly',
@@ -40,18 +74,38 @@ class TitleFilter extends Filter
             'metatrader',
             'arduino',
             'yii',
+            'google sheet',
             'google sheets',
-            'google sheet',
-            'google sheet',
             'chrome extension',
             'chrome extensions',
             'zoho desk',
+            'zapier',
             'drift',
             'golang',
             'openemr',
+            'python',
+            'java',
+            'django',
+            'flask',
+            'android',
+            'sails.js',
+            'mern',
+            'magento',
+            'duda',
+            'game development',
+            'page speed optimization',
+            'load speed',
+            'website speed',
+            'whmcs',
+            'cakephp',
+            'fabricjs',
+            'typescript',
+            'ios',
+            'chatbot',
+            'web designer',
+            'blockchain',
         ];
 
-        $title = strtolower($job->title);
 
         // If we find any of this words we fail.
         return ! str_contains_word($title, $blacklist);
