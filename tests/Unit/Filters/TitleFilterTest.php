@@ -15,7 +15,7 @@ class TitleFilterTest extends TestCase
         $filter = new TitleFilter();
 
         $toFail1 = factory(Job::class)->make([
-            'title' => 'Something .net not wanted'
+            'title' => 'Something react.js not wanted'
         ]);
 
         $toFail2 = factory(Job::class)->make([
@@ -23,7 +23,7 @@ class TitleFilterTest extends TestCase
         ]);
 
         $toFail3 = factory(Job::class)->make([
-            'title' => 'Something [.net] not wanted'
+            'title' => 'Something Angular/React.js not wanted'
         ]);
 
         $toPass1 = factory(Job::class)->make([
@@ -34,10 +34,15 @@ class TitleFilterTest extends TestCase
             'title' => 'This strVBAtest pass'
         ]);
 
+        $whitelist = factory(Job::class)->make([
+            'title' => 'Test Vue/React/Angular'
+        ]);
+
         $this->assertFalse($filter->pass($toFail1));
         $this->assertFalse($filter->pass($toFail2));
         $this->assertFalse($filter->pass($toFail3));
         $this->assertTrue($filter->pass($toPass1));
         $this->assertTrue($filter->pass($toPass2));
+        $this->assertTrue($filter->pass($whitelist));
     }
 }

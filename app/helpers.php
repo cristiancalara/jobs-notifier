@@ -13,16 +13,7 @@ if ( ! function_exists('str_contains_word')) {
         foreach ((array)$needles as $needle) {
             $needle = preg_quote($needle, '/');
 
-            // Boundaries. Match space + [] pair
-            $start = '[\s|\[]';
-            $end   = '[\s|\]]';
-
-            // Position in the line.
-            $beginning = '^' . $start . '*' . $needle . $end . '+';
-            $middle    = $start . '+' . $needle . $end . '+';
-            $end       = $start . '+' . $needle . $end . '*$';
-
-            if ( ! ! preg_match('/' . $beginning . '|' . $middle . '|' . $end . '/i', $haystack)) {
+            if ( ! ! preg_match('/\b' . $needle . '\b/i', $haystack)) {
                 return true;
             }
         }

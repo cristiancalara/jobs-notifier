@@ -4,6 +4,7 @@ namespace App\Upwork;
 
 use App\Upwork\Filters\ContractorTierFilter;
 use App\Upwork\Filters\Filter;
+use App\Upwork\Filters\SkillsFilter;
 use App\Upwork\Filters\SubcategoryFilter;
 use App\Upwork\Filters\TitleFilter;
 use App\User;
@@ -45,6 +46,7 @@ class Importer
 
         $this->filters = [
             new SubcategoryFilter,
+            new SkillsFilter,
             new ContractorTierFilter,
             new TitleFilter,
         ];
