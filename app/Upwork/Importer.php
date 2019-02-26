@@ -2,6 +2,7 @@
 
 namespace App\Upwork;
 
+use App\Notifications\JobOverRateThreshold;
 use App\Upwork\Filters\ContractorTierFilter;
 use App\Upwork\Filters\Filter;
 use App\Upwork\Filters\SkillsFilter;
@@ -71,6 +72,11 @@ class Importer
 
             $model->user_id = $this->user->id;
             $model->save();
+
+            // Send notification if rating is over 90.
+            if ($model->rating > config('notifications.threshold')) {
+                $this->user->notify(new JobOverRateThreshold($model));
+            }
         }
 
         // Update the last imported at with the latest job we imported.
