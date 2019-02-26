@@ -32,6 +32,9 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('jobs-notifier:import-jobs')
                  ->everyFiveMinutes();
+
+        $schedule->command('jobs-notifier:cleanup-jobs')
+                 ->everyFiveMinutes();
     }
 
     /**

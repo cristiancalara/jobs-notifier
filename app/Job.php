@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $skills
  * @property string|null $snippet
  * @property string $url
- * @property string $date_created
+ * @property \Illuminate\Support\Carbon $date_created
  * @property array|null $extra
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
