@@ -48,10 +48,16 @@ class JobOverRateThreshold extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        $mailMessage = (new MailMessage)
             ->subject('New interesting job on Upwork')
             ->line('A new job with the title "' . $this->job->title . '"')
-            ->action('Go to Upwork', $this->job->url)
-            ->cc(config('notifications.cc'));
+            ->action('Go to Upwork', $this->job->url);
+
+        // Add CC.
+        if (config('notifications.cc')) {
+            $mailMessage->cc(config('notifications.cc'));
+        }
+
+        return $mailMessage;
     }
 }
