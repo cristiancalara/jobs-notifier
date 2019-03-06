@@ -43,15 +43,18 @@ class CleanupJobs extends Command
     public function handle()
     {
         $oneDayAgo     = new Carbon('1 day ago');
+        $fourDaysAgo   = new Carbon('4 day ago');
         $notInterested = Status::where('key', 'not_interested')->first();
 
-        Job::chunkById(200, function ($jobs) use ($oneDayAgo, $notInterested) {
+        Job::chunkById(200, function ($jobs) use ($oneDayAgo, $fourDaysAgo, $notInterested) {
             $ids = [];
             /** @var Job $job */
             foreach ($jobs as $job) {
                 if (
-                    $job->date_created->lt($oneDayAgo) &&
-                    $job->rating < 70
+                    // If later than one day and has under 70.
+                    ($job->date_created->lt($oneDayAgo) && $job->rating < 70) ||
+                    // If it's older than 4 days.
+                    $job->date_created->lt($fourDaysAgo)
                 ) {
                     $ids[] = $job->id;
                 }
