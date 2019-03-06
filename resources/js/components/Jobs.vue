@@ -6,6 +6,23 @@
 			</div>
 		</div>
 		<div v-show="!loading" class="jobs-list">
+			<div class="d-flex align-items-center justify-content-end mb-3">
+				<span class="pr-2">Sort by:</span>
+				<div class="dropdown float-right">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+						{{ sortBy.label }}
+					</button>
+					<div class="dropdown-menu">
+						<a v-for="option in sortByOptions"
+						   class="dropdown-item"
+						   href="#"
+						   @click.prevent="changeSortBy(option)">
+							{{ option.label }}
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
 			<div v-for="job in sortedJobs" :key="job.id" class="job card card-default">
 				<div class="card-header d-flex align-items-center">
 					<h6 class="w-75 m-0">
@@ -55,18 +72,28 @@
 			}
 		},
 		data() {
+			let sortByOptions = {
+				rating: {
+					label: 'Rating',
+					func: (a, b) => b.rating - a.rating
+				},
+				date_created: {
+					label: 'Date',
+					func: (a, b) => moment.utc(b.date_created).diff(moment.utc(a.date_created))
+				}
+			};
+
 			return {
 				statuses: App.statuses(),
+				sortByOptions: sortByOptions,
+				sortBy: sortByOptions.rating,
 				jobs: [],
 				loading: true
 			}
 		},
 		computed: {
 			sortedJobs() {
-				return this.jobs
-					.sort((a, b) => {
-						return b.rating - a.rating;
-					});
+				return this.jobs.sort(this.sortBy.func);
 			}
 		},
 		mounted() {
@@ -101,6 +128,10 @@
 					// Add back if there was an issue.
 					this.jobs.push(job);
 				}
+			},
+
+			changeSortBy(sortBy) {
+				this.sortBy = sortBy;
 			},
 
 			fromNow(job) {
