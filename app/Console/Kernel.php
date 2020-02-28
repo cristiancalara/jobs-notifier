@@ -34,7 +34,10 @@ class Kernel extends ConsoleKernel
                  ->everyFiveMinutes();
 
         $schedule->command('jobs-notifier:cleanup-jobs')
-                 ->everyFiveMinutes();
+                 ->daily();
+
+        $schedule->command('jobs-notifier:archive-jobs')
+            ->weekly();
     }
 
     /**
