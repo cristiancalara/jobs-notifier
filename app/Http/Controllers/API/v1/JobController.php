@@ -23,7 +23,9 @@ class JobController extends APIController
             $query->where('status_id', $status);
         }
 
-        $query->limit(500);
+        $query
+            ->latest()
+            ->limit(500);
 
         return $this->response()->array($query->get()->toArray());
     }
