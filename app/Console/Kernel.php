@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
                  ->daily();
 
         $schedule->command('jobs-notifier:archive-jobs')
-            ->weekly();
+            ->daily();
     }
 
     /**
