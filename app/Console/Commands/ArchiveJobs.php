@@ -41,7 +41,7 @@ class ArchiveJobs extends Command
      */
     public function handle()
     {
-        $limit = new Carbon('1 month ago');
+        $limit = new Carbon('1 week ago');
 
         Job::chunkById(10, function ($jobs) use ($limit) {
             $jobsToArchive = collect([]);
