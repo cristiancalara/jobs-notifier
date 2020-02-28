@@ -18,23 +18,24 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         CreateUser::class,
         GetAccessToken::class,
-        ImportJobs::class
+        ImportJobs::class,
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      *
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('jobs-notifier:import-jobs')
-                 ->everyFiveMinutes();
+            ->everyFiveMinutes()
+            ->withoutOverlapping();
 
         $schedule->command('jobs-notifier:cleanup-jobs')
-                 ->daily();
+            ->daily();
 
         $schedule->command('jobs-notifier:archive-jobs')
             ->daily();
@@ -47,7 +48,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
     }
